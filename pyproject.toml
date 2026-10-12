@@ -19,6 +19,7 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=2.4.0",
+    "pytest>=9.1.1",
     "ruff>=0.17.0",
 ]
 
@@ -48,3 +49,14 @@ known-first-party = ["mnkex_bot"]
 python_version = "3.14"
 strict = true
 files = ["src"]
+
+[tool.pytest.ini_options]
+addopts = ["-m", "unit", "--strict-markers", "--strict-config"]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+markers = [
+    "unit: isolated tests with no external services",
+    "integration: tests that use external services",
+    "functional: end-to-end scenarios",
+    "slow: tests excluded from the default run",
+]
