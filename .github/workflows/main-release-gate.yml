@@ -1,0 +1,21 @@
+name: Main release gate
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+
+jobs:
+  release-from-develop:
+    name: release-from-develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject PRs whose head is not develop
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$BASE_REF" = "main" ] && [ "$HEAD_REF" != "develop" ]; then
+            printf 'В main можно влить только ветку develop (сейчас: %s).\n' "$HEAD_REF"
+            exit 1
+          fi
